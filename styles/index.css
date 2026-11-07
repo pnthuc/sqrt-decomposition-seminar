@@ -100,8 +100,6 @@
 .demo-step strong { display: flex; gap: 10px; min-height: 31px; }
 .demo-step-num { font-family: var(--mono); }
 .demo-step code { font: 700 var(--type-code)/1.45 var(--mono); }
-.demo-total { display: flex; justify-content: flex-end; align-items: baseline; gap: 15px; margin-top: 28px; font: 600 var(--type-formula)/1.2 var(--mono); }
-.demo-total strong { min-width: 2ch; color: var(--teal); text-align: right; }
 .formula-text { font-size: var(--type-formula); font-variant-numeric: tabular-nums; font-weight: 700; }
 .range-picker { touch-action: none; user-select: none; }
 .range-picker .array-strip { margin-bottom: 12px; }
@@ -117,11 +115,7 @@
   color: var(--teal);
   font: 700 14px/1 var(--mono);
 }
-.range-demo .range-help { display: flex; justify-content: space-between; margin-bottom: 0; }
 .range-demo .demo-track { margin-top: 26px; }
-.range-totals { display: flex; justify-content: space-between; gap: 24px; }
-.range-totals .demo-total { margin-top: 18px; }
-.range-totals .demo-total:only-child { margin-left: auto; }
 
 .mo-demo .array-strip { margin-bottom: 12px; }
 .pointer-track { position: relative; height: 48px; }
@@ -174,7 +168,7 @@
   --slidev-code-margin: 18px 0 16px;
 }
 .code-slide pre.shiki {
-  --slidev-code-background: var(--surface);
+  --slidev-code-background: var(--shiki-light-bg, var(--surface));
   border: 1px solid var(--line);
 }
 html:not(.dark) .code-slide pre.shiki,
@@ -182,10 +176,8 @@ html:not(.dark) .code-slide pre.shiki span {
   color: var(--shiki-light, var(--ink));
 }
 .code-slide .slidev-code code { font-size: inherit; }
-.code-slide .slidev-code code .line::before { color: #425d65; opacity: 1; }
+.code-slide .slidev-code code .line::before { color: #606060; opacity: 1; }
 .code-slide pre.shiki .slidev-code-dishonored { opacity: 1; }
-html:not(.dark) .code-slide pre.shiki .slidev-code-dishonored span { color: var(--ink); }
-html:not(.dark) .code-slide pre.shiki .seminar-control-keyword { color: #204e87; }
 .code-slide pre.shiki:has(.slidev-code-dishonored) .slidev-code-highlighted {
   background: var(--teal-pale);
   box-shadow: -3px 0 var(--teal);

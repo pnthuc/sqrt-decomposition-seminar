@@ -42,7 +42,7 @@ const parts = computed(() => {
     subtotal += sum(terms)
     return {
       label: partLabels[index],
-      start, stop, subtotal,
+      start, stop,
       tone: index === 1 ? 'retained' : 'edge',
       expression: terms.length === 0
         ? 'Không có'
@@ -116,7 +116,7 @@ function pickWithKeyboard(event: KeyboardEvent) {
     <p class="demo-label">
       <code v-if="range">sum({{ range[0] }}, {{ range[1] }})</code>
       <code v-else>sum(L, R)</code>
-      <span>B = {{ blockSize }}</span><span>Chỉ số từ 0</span>
+      <span>B = {{ blockSize }}</span>
     </p>
     <div
       class="range-picker"
@@ -134,16 +134,11 @@ function pickWithKeyboard(event: KeyboardEvent) {
     >
       <BlockStrip :values="values" :block-size="blockSize" :captions="captions" :marks="marks" :selection="range" selectable />
     </div>
-    <p class="range-help small">Kéo qua các ô để chọn [L, R] <span>→ xem từng bước</span></p>
-    <div class="demo-track">
+    <div class="demo-track" aria-live="polite">
       <div v-for="(part, index) in parts" :key="part.label" class="demo-step" :class="{ 'is-current': step === index + 1, 'is-complete': step > index + 1 }">
         <strong><span class="demo-step-num">{{ index + 1 }}</span>{{ part.label }}</strong>
         <span v-if="step > index" class="formula-text step-change">{{ part.expression }}</span>
       </div>
-    </div>
-    <div class="range-totals" aria-live="polite">
-      <div v-if="picked" class="demo-total">Tổng đoạn <strong>{{ parts.at(-1)?.subtotal }}</strong></div>
-      <div v-if="step" class="demo-total">ans = <strong :key="step" class="step-change">{{ parts[step - 1].subtotal }}</strong></div>
     </div>
   </div>
 </template>

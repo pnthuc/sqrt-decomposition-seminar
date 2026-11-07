@@ -1,35 +1,10 @@
-import type { ShikiTransformer } from 'shiki'
-
-const seminarLight = {
-  name: 'seminar-light',
-  type: 'light' as const,
-  colors: {
-    'editor.background': '#ffffff',
-    'editor.foreground': '#102e38',
-  },
-  tokenColors: [
-    { scope: 'keyword.control', settings: { foreground: '#204e87' } },
-    { scope: ['storage', 'support.type'], settings: { foreground: '#00636b' } },
-    { scope: ['constant', 'string'], settings: { foreground: '#40558a' } },
-    { scope: 'comment', settings: { foreground: '#45636b' } },
-  ],
-}
-
-const controlFlow: ShikiTransformer = {
-  name: 'seminar:cpp-control-flow',
-  span(node) {
-    if (this.options.lang !== 'cpp') return
-    const token = node.children[0]
-    if (token?.type === 'text' && /^(for|if|else|while|return|break|continue)$/.test(token.value.trim())) {
-      this.addClassToHast(node, 'seminar-control-keyword')
-    }
-  },
-}
+// TextMate colors from the bundled VS Code Light 2026 theme and its includes.
+// https://github.com/microsoft/vscode/blob/a717861c07586a53d83b80d742cd3f59b20a6273/extensions/theme-defaults/themes/2026-light.json
+import light2026 from './themes/vscode-light-2026.json'
 
 export default () => ({
   themes: {
-    light: seminarLight,
+    light: { ...light2026, type: 'light' as const },
     dark: 'github-dark-high-contrast',
   },
-  transformers: [controlFlow],
 })
