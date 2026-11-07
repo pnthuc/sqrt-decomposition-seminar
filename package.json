@@ -1,0 +1,19 @@
+{
+  "name": "sqrt-decomposition-seminar",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.22.0"
+  },
+  "scripts": {
+    "dev": "slidev",
+    "build": "slidev build"
+  },
+  "dependencies": {
+    "@fontsource/be-vietnam-pro": "5.3.0",
+    "@slidev/cli": "53.1.0",
+    "@slidev/theme-default": "0.25.0",
+    "vue": "^3.5.0"
+  }
+}
