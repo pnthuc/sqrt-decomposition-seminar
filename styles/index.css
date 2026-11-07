@@ -185,6 +185,7 @@ html:not(.dark) .code-slide pre.shiki span {
 .code-slide .slidev-code code .line::before { color: #425d65; opacity: 1; }
 .code-slide pre.shiki .slidev-code-dishonored { opacity: 1; }
 html:not(.dark) .code-slide pre.shiki .slidev-code-dishonored span { color: var(--ink); }
+html:not(.dark) .code-slide pre.shiki .seminar-control-keyword { color: #204e87; }
 .code-slide pre.shiki:has(.slidev-code-dishonored) .slidev-code-highlighted {
   background: var(--teal-pale);
   box-shadow: -3px 0 var(--teal);
