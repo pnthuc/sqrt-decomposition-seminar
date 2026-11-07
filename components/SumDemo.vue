@@ -26,6 +26,11 @@ const picked = computed(() => {
   return [Math.min(anchor.value, end.value), Math.max(anchor.value, end.value)] as const
 })
 const range = computed(() => picked.value ?? (step.value > 0 ? example : undefined))
+const displayStep = computed(() => {
+  if (step.value > 0 || !picked.value || pointerId.value !== undefined || choosingWithKeyboard.value)
+    return step.value
+  return partLabels.length
+})
 
 const parts = computed(() => {
   const [left, right] = range.value ?? [0, -1]
@@ -54,7 +59,7 @@ const parts = computed(() => {
 const marks = computed(() => Object.fromEntries(parts.value.flatMap((part, index) =>
   Array.from({ length: part.stop - part.start }, (_, offset) => [
     part.start + offset,
-    step.value > index ? part.tone : 'in-range',
+    displayStep.value > index ? part.tone : 'in-range',
   ]),
 )))
 
@@ -135,9 +140,9 @@ function pickWithKeyboard(event: KeyboardEvent) {
       <BlockStrip :values="values" :block-size="blockSize" :captions="captions" :marks="marks" :selection="range" selectable />
     </div>
     <div class="demo-track" aria-live="polite">
-      <div v-for="(part, index) in parts" :key="part.label" class="demo-step" :class="{ 'is-current': step === index + 1, 'is-complete': step > index + 1 }">
+      <div v-for="(part, index) in parts" :key="part.label" class="demo-step" :class="{ 'is-current': displayStep === index + 1, 'is-complete': displayStep > index + 1 }">
         <strong><span class="demo-step-num">{{ index + 1 }}</span>{{ part.label }}</strong>
-        <span v-if="step > index" class="formula-text step-change">{{ part.expression }}</span>
+        <span v-if="displayStep > index" class="formula-text step-change">{{ part.expression }}</span>
       </div>
     </div>
   </div>

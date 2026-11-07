@@ -17,7 +17,7 @@ Mở [bản trình chiếu](http://localhost:3047/) hoặc [chế độ người
 
 - **→ / ←** tiến hoặc lùi một bước bấm. Khi hết bước, phím chuyển sang slide tiếp theo hoặc trước đó.
 - Ví dụ tổng đoạn ở slide 4, lazy ở slide 16, cửa sổ Mo ở slide 22 và ví dụ mode ở slide 27–28.
-- Ở slide 4, giữ chuột và kéo qua các ô để chọn đoạn, hoặc dùng Tab và Enter để đặt hai đầu. Phím → chạy lần lượt ba phần của đoạn đã chọn, hoặc dùng ví dụ gốc nếu chưa có đoạn.
+- Ở slide 4, kéo qua các ô rồi thả chuột, hoặc dùng Tab và Enter để đặt hai đầu. Ba phép tính hiện ngay khi chọn xong. Phím → trình bày lại từng bước, hoặc chạy ví dụ gốc nếu chưa chọn đoạn.
 - Slide dùng chuyển cảnh ngắn theo chiều bấm và tôn trọng thiết lập giảm chuyển động của hệ điều hành.
 - Speaker notes có số trang PDF và chỉ dẫn tương ứng với từng lần bấm.
 
