@@ -2,6 +2,8 @@
 
 Project Slidev cho bài seminar, gồm 46 slide 16:9 với speaker notes tiếng Việt. Font và năm biểu đồ thực nghiệm được đóng gói cùng project.
 
+[Mở bài trình chiếu trên GitHub Pages](https://pnthuc.github.io/sqrt-decomposition-seminar/). GitHub Actions triển khai lại sau mỗi lần đẩy lên `main`.
+
 ## Chạy trong thư mục này
 
 Cần Node.js 22.22.0 trở lên.
