@@ -85,6 +85,7 @@ clicks: 3
 PDF trang 3–8  
 Mảng dùng chỉ số từ 0  
 Block 0 chứa a[0..3], block 1 chứa a[4..7], block 2 chứa a[8..11]
+Kéo chuột qua các ô để chọn đoạn khác, hoặc bấm mũi tên phải khi chưa chọn để chạy ví dụ [2, 10]
 [click] Cộng a[2] và a[3] để chạm đầu block 1
 [click] Block 1 nằm trọn trong truy vấn  
 Lấy một tổng đã lưu rồi nhảy sang i = 8

@@ -25,7 +25,7 @@
   --type-body: 24px;
   --type-meta: 18px;
   --type-formula: 27px;
-  --type-code: 23px;
+  --type-code: 24px;
   --motion-ease: cubic-bezier(.22, .66, .27, 1);
 }
 
@@ -103,6 +103,25 @@
 .demo-total { display: flex; justify-content: flex-end; align-items: baseline; gap: 15px; margin-top: 28px; font: 600 var(--type-formula)/1.2 var(--mono); }
 .demo-total strong { min-width: 2ch; color: var(--teal); text-align: right; }
 .formula-text { font-size: var(--type-formula); font-variant-numeric: tabular-nums; font-weight: 700; }
+.range-picker { touch-action: none; user-select: none; }
+.range-picker .array-strip { margin-bottom: 12px; }
+.range-picker .array-cell { position: relative; padding: 0; cursor: crosshair; }
+.range-picker .array-cell:hover { border-color: var(--teal); }
+.range-picker .array-cell:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
+.range-picker .in-range { border-color: #86b9b9; background: var(--surface-tint); }
+.range-picker [data-boundary]::after {
+  content: attr(data-boundary);
+  position: absolute;
+  right: 5px;
+  bottom: 4px;
+  color: var(--teal);
+  font: 700 14px/1 var(--mono);
+}
+.range-demo .range-help { display: flex; justify-content: space-between; margin-bottom: 0; }
+.range-demo .demo-track { margin-top: 26px; }
+.range-totals { display: flex; justify-content: space-between; gap: 24px; }
+.range-totals .demo-total { margin-top: 18px; }
+.range-totals .demo-total:only-child { margin-left: auto; }
 
 .mo-demo .array-strip { margin-bottom: 12px; }
 .pointer-track { position: relative; height: 48px; }
@@ -150,7 +169,7 @@
 .slidev-layout.code-slide {
   --slidev-code-font-family: var(--mono);
   --slidev-code-font-size: var(--type-code);
-  --slidev-code-line-height: 28px;
+  --slidev-code-line-height: 27px;
   --slidev-code-padding: 16px;
   --slidev-code-margin: 18px 0 16px;
 }
@@ -160,12 +179,12 @@
 }
 html:not(.dark) .code-slide pre.shiki,
 html:not(.dark) .code-slide pre.shiki span {
-  color: var(--ink);
-  color: color-mix(in srgb, var(--shiki-light, var(--ink)) 62%, var(--ink));
+  color: var(--shiki-light, var(--ink));
 }
 .code-slide .slidev-code code { font-size: inherit; }
+.code-slide .slidev-code code .line::before { color: #425d65; opacity: 1; }
 .code-slide pre.shiki .slidev-code-dishonored { opacity: 1; }
-html:not(.dark) .code-slide pre.shiki .slidev-code-dishonored span { color: var(--muted); }
+html:not(.dark) .code-slide pre.shiki .slidev-code-dishonored span { color: var(--ink); }
 .code-slide pre.shiki:has(.slidev-code-dishonored) .slidev-code-highlighted {
   background: var(--teal-pale);
   box-shadow: -3px 0 var(--teal);
