@@ -23,6 +23,14 @@ Mở [bản trình chiếu](http://localhost:3047/) hoặc [chế độ người
 
 `npm run build` tạo bản web tĩnh trong `dist/`. Phục vụ thư mục đó qua HTTP để trình chiếu bản build.
 
+## Điều khiển bằng điện thoại
+
+1. Mở bài trình chiếu trên laptop. Đưa chuột xuống góc dưới bên trái rồi bấm biểu tượng điện thoại trên thanh Slidev.
+2. Quét QR bằng điện thoại hoặc mở link ghép nối. Đóng hộp ghép nối trên laptop để tiếp tục trình chiếu.
+3. Bấm **Lùi** hoặc **Tiến** trên điện thoại để lùi hoặc tiến từng bước. Mở lại hộp ghép nối và bấm **Kết thúc phiên** khi xong.
+
+Trên GitHub Pages, điều khiển dùng PeerJS để ghép nối qua Internet. Nên thử trước trên cùng Wi-Fi hoặc hotspot. Mạng chặn WebRTC có thể không kết nối được. Nếu cần chạy qua LAN, dùng `npm run dev -- --remote --port 3047` rồi mở địa chỉ mạng mà Slidev in ra trên điện thoại. Giữ link hoặc QR ghép nối cho người điều khiển bài.
+
 ## Tệp cần xem
 
 - [slides.md](slides.md) chứa nội dung, công thức KaTeX và speaker notes.
