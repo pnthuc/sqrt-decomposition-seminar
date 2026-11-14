@@ -3,18 +3,23 @@ import { useNav, useSlideContext } from '@slidev/client'
 import { computed, ref } from 'vue'
 import BlockStrip from './BlockStrip.vue'
 
-const props = defineProps<{ step: number }>()
+const props = defineProps<{ step: number, editable?: boolean }>()
 const { go, next, prev, currentPage } = useNav()
 const { $page } = useSlideContext()
-const values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+const initialValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+const values = ref([...initialValues])
+const updateIndex = ref(5)
+const updateValue = ref(20)
+const lastUpdate = ref('')
 const blockSize = 4
 const example = [2, 10] as const
 const partLabels = ['Biên trái', 'Block trọn', 'Biên phải']
 const sum = (terms: number[]) => terms.reduce((total, value) => total + value, 0)
-const blockTotals = Array.from({ length: Math.ceil(values.length / blockSize) }, (_, block) =>
-  sum(values.slice(block * blockSize, (block + 1) * blockSize)),
+const initialBlockTotals = Array.from({ length: Math.ceil(initialValues.length / blockSize) }, (_, block) =>
+  sum(initialValues.slice(block * blockSize, (block + 1) * blockSize)),
 )
-const captions = blockTotals.map((total, block) => 'b[' + block + '] = ' + total)
+const blockTotals = ref([...initialBlockTotals])
+const captions = computed(() => blockTotals.value.map((total, block) => 'b[' + block + '] = ' + total))
 
 const anchor = ref<number>()
 const end = ref<number>()
@@ -41,8 +46,8 @@ const parts = computed(() => {
 
   return spans.map(([start, stop], index) => {
     const terms = index === 1
-      ? blockTotals.slice(start / blockSize, stop / blockSize)
-      : values.slice(start, stop)
+      ? blockTotals.value.slice(start / blockSize, stop / blockSize)
+      : values.value.slice(start, stop)
     const addends = subtotal === 0 ? terms : [subtotal, ...terms]
     subtotal += sum(terms)
     return {
@@ -114,10 +119,37 @@ function pickWithKeyboard(event: KeyboardEvent) {
   else startSelection(index)
   choosingWithKeyboard.value = !choosingWithKeyboard.value
 }
+
+function assignValue() {
+  const index = Number(updateIndex.value)
+  const value = Number(updateValue.value)
+  if (!Number.isInteger(index) || index < 0 || index >= values.value.length || !Number.isInteger(value) || Math.abs(value) > 1000000) return
+  const block = Math.floor(index / blockSize)
+  const previousTotal = blockTotals.value[block]
+  const previous = values.value[index]
+  blockTotals.value[block] += value - previous
+  values.value[index] = value
+  lastUpdate.value = 'Δ = ' + value + ' − (' + previous + ') = ' + (value - previous)
+    + ' → b[' + block + '] = ' + previousTotal + ' + (' + (value - previous) + ') = ' + blockTotals.value[block]
+}
+
+function reset() {
+  values.value = [...initialValues]
+  blockTotals.value = [...initialBlockTotals]
+  anchor.value = end.value = undefined
+  lastUpdate.value = ''
+  if (currentPage.value === $page.value) void go($page.value, 0)
+}
 </script>
 
 <template>
   <div class="array-demo range-demo" :data-step="step">
+    <form v-if="editable" class="demo-controls sum-controls" @submit.prevent="assignValue" @keydown.stop @pointerdown.stop>
+      <label>Vị trí <select v-model="updateIndex" aria-label="Vị trí cần gán"><option v-for="(_, index) in values" :key="index" :value="index">{{ index }}</option></select></label>
+      <label>Giá trị <input v-model="updateValue" type="number" step="1" min="-1000000" max="1000000" required aria-label="Giá trị mới" /></label>
+      <button type="submit">Gán điểm</button>
+      <button type="button" @click="reset">Mảng ban đầu</button>
+    </form>
     <p class="demo-label">
       <code v-if="range">sum({{ range[0] }}, {{ range[1] }})</code>
       <code v-else>sum(L, R)</code>
@@ -145,5 +177,6 @@ function pickWithKeyboard(event: KeyboardEvent) {
         <span v-if="displayStep > index" class="formula-text step-change">{{ part.expression }}</span>
       </div>
     </div>
+    <p v-if="editable && lastUpdate" class="small update-summary" aria-live="polite">{{ lastUpdate }}</p>
   </div>
 </template>

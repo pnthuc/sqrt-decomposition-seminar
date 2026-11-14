@@ -116,6 +116,36 @@
   font: 700 14px/1 var(--mono);
 }
 .range-demo .demo-track { margin-top: 26px; }
+.demo-controls { display: flex; align-items: center; gap: 14px; font-size: var(--type-meta); }
+.demo-controls label { display: flex; align-items: center; gap: 10px; }
+.demo-controls :is(button, input, select) {
+  min-height: 42px;
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+}
+.demo-controls button { cursor: pointer; font-weight: 700; }
+.demo-controls button:not(:disabled):hover { border-color: var(--teal); background: var(--teal-pale); }
+.demo-controls :is(button, input, select):focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; }
+.demo-controls button:disabled { opacity: .4; cursor: default; }
+.sum-controls { margin-bottom: 18px; }
+.sum-controls input { width: 110px; }
+.slidev-layout.sum-live .array-demo { margin-top: 16px; }
+.slidev-layout .update-summary { margin-top: 18px; }
+.mo-run .array-strip { margin: 18px 0 12px; }
+.mo-run-details { display: grid; grid-template-columns: 1.2fr 1fr; gap: 36px; margin: 12px 0 18px; }
+.slidev-layout .mo-run-details table { margin: 0 0 10px; font-size: var(--type-meta); }
+.slidev-layout .mo-run-details table:not(.counts) { margin: 0 0 10px; }
+.slidev-layout .mo-run-details table :is(th, td) { padding: 8px 12px; line-height: 1.3; }
+.mo-run-details .mo-action { min-height: 54px; margin-bottom: 10px; font-size: var(--type-code); }
+.mo-run-details .emphasis { margin-bottom: 0; }
+.mo-run-details .is-current :is(th, td) { background: var(--teal-pale); }
+.slidev-layout .decision-note { border-left: 4px solid var(--teal); padding: 14px 20px; margin-top: 28px; color: var(--muted); font-size: var(--type-meta); }
+.slidev-layout .decision-slide table { margin-top: 24px; }
+.slidev-layout .offline-comparison .columns { margin-top: 16px; margin-bottom: 20px; }
 
 .mo-demo .array-strip { margin-bottom: 12px; }
 .pointer-track { position: relative; height: 48px; }

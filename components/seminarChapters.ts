@@ -3,5 +3,5 @@ export const chapters = [
   { scene: 'lazy', label: 'Thực nghiệm và lazy' },
   { scene: 'mo', label: 'Mo’s algorithm' },
   { scene: 'practice', label: 'Ứng dụng thực tiễn' },
-  { scene: 'questions', label: 'Hỏi đáp và bài tập' },
+  { scene: 'questions', label: 'Hỏi đáp' },
 ] as const

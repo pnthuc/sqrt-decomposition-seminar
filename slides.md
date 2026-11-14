@@ -214,6 +214,107 @@ Tổng bộ nhớ là O(n + ceil(n/B)) = O(n), trong đó tổng block chỉ t�
 -->
 
 ---
+clicks: 3
+class: sum-live
+---
+
+# Demo: cập nhật rồi chọn đoạn
+
+Kéo chọn hai đầu đoạn rồi thử gán một giá trị mới
+
+<SumDemo :step="$clicks" editable />
+
+<!--
+Demo bổ sung theo góp ý seminar, dùng mảng và quy tắc chỉ số từ PDF trang 3–13
+Cho người nghe chọn đoạn trước khi tính
+Có thể chọn hai đầu bằng Tab và Enter trên các ô
+Chạy [1,9] trên mảng ban đầu để thấy 54
+Gán a[5] = 20 rồi giữ nguyên đoạn để thấy 68
+Thử gán a[11] = 100 ở ngoài đoạn để thấy tổng truy vấn vẫn bằng 68
+Chọn đoạn cùng block [1,2] để thấy chỉ cần duyệt các ô biên
+Nút Mảng ban đầu khôi phục dữ liệu trước khi tiếp tục sang bài tập
+[click] Xem biên trái
+[click] Xem các block trọn
+[click] Xem biên phải
+-->
+
+---
+
+# Bài 1: tự tính một truy vấn mới
+
+Tính `sum(1, 9)` trên mảng ban đầu với **B = 4**
+
+<BlockStrip :values="[1,2,3,4,5,6,7,8,9,10,11,12]" :block-size="4" />
+
+<p class="exercise">Chỉ ra biên trái, block trọn và biên phải</p>
+
+<!--
+PDF trang 63
+Để người nghe tự xác định các chỉ số trước khi tính
+Bài dùng đoạn đóng và chỉ số từ 0
+Dừng để người nghe trả lời rồi chuyển sang slide đáp án kế tiếp
+-->
+
+---
+
+# Đáp án Bài 1: sum(1,9) = 54
+
+Đoạn **[1, 9]** trên mảng ban đầu
+
+<BlockStrip :values="[1,2,3,4,5,6,7,8,9,10,11,12]" :block-size="4" :captions="['b[0] = 10','b[1] = 26','b[2] = 42']" :marks="{1:'edge',2:'edge',3:'edge',4:'retained',5:'retained',6:'retained',7:'retained',8:'edge',9:'edge'}" />
+
+<div class="three-parts">
+  <div class="edge"><h2>Biên trái</h2><strong>2 + 3 + 4 = 9</strong></div>
+  <div><h2>Block giữa</h2><strong>26</strong></div>
+  <div class="edge"><h2>Biên phải</h2><strong>9 + 10 = 19</strong></div>
+</div>
+
+<p class="formula-text">9 + 26 + 19 = 54</p>
+
+<!--
+PDF trang 67
+Biên trái ở chỉ số 1–3, block giữa ở 4–7 và biên phải ở 8–9
+-->
+
+---
+
+# Bài 2: cập nhật rồi truy vấn lại
+
+Từ mảng Bài 1, gán `a[5] = 20`
+
+<BlockStrip :values="[1,2,3,4,5,6,7,8,9,10,11,12]" :block-size="4" :marks="{5: 'edge'}" />
+
+<p class="exercise">Tổng block nào đổi?<br><code>sum(1, 9)</code> mới bằng bao nhiêu?</p>
+
+<!--
+PDF trang 64
+Hỏi xem có cần tính lại cả ba block không
+Đáp án ở slide kế tiếp
+-->
+
+---
+
+# Đáp án Bài 2: sum(1,9) = 68
+
+Sau gán `a[5] = 20`, **Δ = 14**
+
+<BlockStrip :values="[1,2,3,4,5,20,7,8,9,10,11,12]" :block-size="4" :captions="['b[0] = 10','b[1] = 40','b[2] = 42']" :marks="{1:'edge',2:'edge',3:'edge',4:'retained',5:'added',6:'retained',7:'retained',8:'edge',9:'edge'}" :active-block="1" />
+
+<div class="three-parts">
+  <div class="edge"><h2>Biên trái</h2><strong>9</strong></div>
+  <div><h2>Block giữa</h2><strong>26 + 14 = 40</strong></div>
+  <div class="edge"><h2>Biên phải</h2><strong>19</strong></div>
+</div>
+
+<p class="formula-text">9 + 40 + 19 = 68</p>
+
+<!--
+PDF trang 68
+Chỉ block 1 đổi tổng
+Biên trái và biên phải vẫn có tổng lần lượt là 9 và 19
+-->
+
+---
 class: seminar-opener
 chapter: lazy
 ---
@@ -264,6 +365,27 @@ Với mẫu này Fenwick có thời gian thấp hơn ở 10% và 50% cập nhậ
 -->
 
 ---
+class: decision-slide
+---
+
+# Kết luận: chọn theo tỉ lệ cập nhật
+
+| Tải công việc trong phép đo | Cấu trúc nên cân nhắc | Căn cứ |
+| --- | --- | --- |
+| 10% hoặc 50% gán điểm | Fenwick | 2,28 và 2,20 ms, thấp nhất mẫu đo |
+| 90% hoặc 99% gán điểm | Sqrt cho tổng đoạn | 1,69 và 0,34 ms, thấp nhất mẫu đo |
+| Cần thao tác tổng quát hơn | Segment tree | Chọn theo phép gộp và loại cập nhật |
+
+<p v-click class="decision-note reveal">Sqrt hưởng lợi từ gán điểm O(1) khi giữ tổng block<br>Đo lại trên tải thực tế trước khi chọn một ngưỡng tỉ lệ</p>
+
+<!--
+Kết luận bổ sung từ biểu đồ PDF trang 20
+Các số là thời gian cho 100.000 thao tác, loại xây dựng và I/O
+Hai mức 90% và 99% chỉ mô tả các cấu hình đã đo, không suy ra ngưỡng chung
+[click] Nhắc điều kiện gán điểm cho tổng, không áp dụng kết luận này cho min/max
+-->
+
+---
 
 # Bộ nhớ cấu trúc cần tính cả dữ liệu mà nó giữ
 
@@ -277,6 +399,34 @@ Số liệu tính capacity các mảng và sizeof đối tượng, loại dữ l
 Đây là dung lượng cấu trúc sở hữu, khác với peak RAM/RSS  
 1 KiB = 1.024 byte  
 N/A chỉ phép thử Fenwick trong bảng này, với truy vấn min/max đoạn bất kỳ và phép gán điểm
+-->
+
+---
+class: decision-slide
+---
+
+# Kết luận: cân đối bộ nhớ và thao tác
+
+<div class="columns">
+<div>
+<h2>Khi bộ nhớ là ràng buộc</h2>
+<p>Sqrt dùng <strong>783,8 KiB</strong> trong phép đo</p>
+<p>Cân nhắc nếu chi phí truy vấn và cập nhật đáp ứng yêu cầu</p>
+</div>
+<div class="accent">
+<h2>Khi cần truy vấn nhanh hơn</h2>
+<p>Fenwick cho tổng hoặc Segment cho min/max với gán điểm</p>
+<p>Đổi lại cần ngân sách bộ nhớ phù hợp với hiện thực</p>
+</div>
+</div>
+
+<p v-click class="decision-note reveal">N/A của Fenwick gắn với bài min/max đoạn bất kỳ có gán điểm trong phép thử<br>Số liệu là bộ nhớ cấu trúc sở hữu, chưa phải peak RAM của chương trình</p>
+
+<!--
+Kết luận bổ sung từ biểu đồ PDF trang 21
+Không suy rộng rằng mọi hiện thực Fenwick cần 1562,6 KiB
+Hiện thực trong phép thử giữ cả mảng giá trị để chuyển gán điểm thành cộng chênh lệch
+[click] Phân biệt khả năng hỗ trợ thao tác với bộ nhớ và phạm vi đo
 -->
 
 ---
@@ -296,6 +446,27 @@ Giá trị 7,84 và 7,91 ms sát nhau, nên đọc cùng vạch biến thiên
 -->
 
 ---
+class: decision-slide
+---
+
+# Kết luận: bắt đầu gần căn rồi đo lại
+
+| Kích thước B trong phép đo | Thời gian | Cách lựa chọn |
+| --- | --- | --- |
+| 158 và 316 | 7,84 và 7,91 ms | Hai ứng viên cần đo thêm |
+| 79 | 10,52 ms | Nhiều tổng block phải duyệt hơn |
+| 632 và 1265 | 10,67 và 17,76 ms | Hai biên có thể phải duyệt dài hơn |
+
+<p v-click class="decision-note reveal">B ≈ √n là điểm bắt đầu từ cận O(B + n/B)<br>Chọn B bằng cùng dữ liệu thử và xem cả độ biến thiên giữa các lần đo</p>
+
+<!--
+Kết luận bổ sung từ biểu đồ PDF trang 22
+Dùng cùng trace, n = q = 100.000 và cập nhật 50%
+[click] Vạch biến thiên của B = 158 và B = 316 chồng nhau
+Không kết luận B = 158 luôn nhanh nhất chỉ từ chênh lệch 0,07 ms
+-->
+
+---
 
 # Min/max: bản Sqrt quét lại block sau mỗi phép gán
 
@@ -310,6 +481,34 @@ Loại xây dựng và I/O, /O2, CPU ghim
 -->
 
 ---
+class: decision-slide
+---
+
+# Kết luận: min/max có gán điểm
+
+<div class="columns">
+<div class="accent">
+<h2>Ưu tiên Segment tree</h2>
+<p>Thấp hơn Sqrt ở mọi tỉ lệ cập nhật được đo</p>
+<p>Gán điểm và hỏi min/max đều O(log n)</p>
+</div>
+<div>
+<h2>Cân nhắc Sqrt</h2>
+<p>Khi bộ nhớ hạn chế hoặc quy mô nhỏ và thời gian vẫn đáp ứng</p>
+<p>Bản đo phải quét lại block sau mỗi phép gán, tốn O(B)</p>
+</div>
+</div>
+
+<p v-click class="decision-note reveal">Tổng block sửa được bằng chênh lệch<br>Min/max cũ bị thay thế có thể buộc phải tìm lại trong block</p>
+
+<!--
+Kết luận bổ sung từ biểu đồ PDF trang 23
+Kết luận thời gian chỉ áp dụng cho hiện thực quét lại block sau mọi phép gán trong nguồn
+[click] Dùng ví dụ [4,9,7], đổi 9 thành 2 thì max mới là 7
+Không dùng lợi thế O(1) của cập nhật tổng để suy ra lợi thế cho cập nhật min/max
+-->
+
+---
 
 # Min/max khi tăng quy mô mảng
 
@@ -321,6 +520,71 @@ q = 100.000, cập nhật 50%, L đều trong [1,n], Sqrt B = floor(√n)
 Mỗi cấu hình có 3 seed × 5 mẫu  
 Dùng trung vị của trung vị và vạch min–max theo seed  
 Loại xây dựng và I/O, /O2, CPU ghim
+-->
+
+---
+class: decision-slide
+---
+
+# Kết luận: chọn theo cả quy mô mảng
+
+| Quy mô trong phép đo | Quan sát min/max | Cấu trúc nên cân nhắc |
+| --- | --- | --- |
+| n = 1.000 | Sqrt 5,0–5,1 ms, Segment 5,3 ms | Sqrt nếu cần gọn và đủ nhanh |
+| n = 10.000 | Sqrt 11,1–11,6 ms, Segment 7,2–7,4 ms | Segment nếu ưu tiên thời gian |
+| n = 100.000 | Sqrt 30,6–31,5 ms, Segment 9,3 ms | Segment khi tải tương tự mẫu đo |
+
+<p v-click class="decision-note reveal">Ở tải 50% cập nhật của phép đo, khoảng cách tăng khi n tăng<br>Chọn bằng thao tác, quy mô, bộ nhớ và dữ liệu đo thực tế</p>
+
+<!--
+Kết luận bổ sung từ biểu đồ PDF trang 24
+Thời gian mỗi 100.000 thao tác, gồm cả min và max, giữ nguyên điều kiện và số liệu nguồn
+[click] Ở n nhỏ, mức chênh lệch thấp cần đọc cùng vạch biến thiên
+Không coi các mốc n trong bảng là ranh giới áp dụng chung
+-->
+
+---
+clicks: 1
+---
+
+# Bài 3: chọn cấu trúc và giải thích
+
+<ol class="exercise-options" type="A">
+  <li>Mảng tĩnh, nhiều truy vấn tổng<span class="focus-option" v-click aria-hidden="true"></span></li>
+  <li>Gán điểm + tổng đoạn, nhiều truy vấn</li>
+  <li>Đếm ≥ K, gán điểm, muốn code theo block</li>
+</ol>
+
+<!--
+PDF trang 65–66
+Yêu cầu nêu cấu trúc, chi phí truy vấn và chi phí cập nhật nếu có
+[click] Nhấn mạnh trường hợp A để bắt đầu thảo luận
+Nguồn không đưa đáp án cho Bài 3
+Slide kế tiếp đưa gợi ý bổ sung để thảo luận
+-->
+
+---
+class: decision-slide
+---
+
+# Gợi ý Bài 3: chọn cấu trúc và giải thích
+
+| Trường hợp | Cấu trúc | Truy vấn | Gán điểm |
+| --- | --- | --- | --- |
+| A — Mảng tĩnh, tổng đoạn | Prefix sum | $O(1)$ | Dựng lại $O(n)$ |
+| B — Gán điểm, nhiều tổng đoạn | Fenwick | $O(\log n)$ | $O(\log n)$ |
+| C — Đếm ≥ K, gán điểm | Block có mảng đã sắp | $O(B+\frac{n}{B}\log B)$ | $O(B)$ |
+
+<p v-click class="decision-note reveal">Với C, quét hai biên và tìm kiếm nhị phân trong từng block trọn<br>Gán điểm cần xóa giá trị cũ và chèn giá trị mới vào mảng đã sắp của block</p>
+
+<!--
+Gợi ý bổ sung cho câu hỏi PDF trang 65–66, nguồn không có đáp án Bài 3
+Prefix sum cần O(n) xây dựng, phù hợp mảng tĩnh và tổng đoạn
+Fenwick lưu giá trị cũ để đổi phép gán thành cộng chênh lệch
+Với C, mỗi block giữ một mảng đã sắp, tìm số phần tử >= K bằng lower_bound
+Xóa và chèn trên mảng liên tiếp tốn O(B), không khẳng định phép gán là O(log B)
+[click] Phác thảo cách làm của C trước khi chuyển sang phần lazy
+Tham khảo thêm https://cp-algorithms.com/data_structures/sqrt_decomposition.html
 -->
 
 ---
@@ -408,30 +672,60 @@ PDF trang 33
 -->
 
 ---
+class: offline-comparison
+---
 
 # Xử lí online offline
 
 <div class="columns">
 <div>
 <h2>Online</h2>
-<p>Đến đâu, xử lý đến đó</p>
-<p class="emphasis">Q1 → trả lời → Q2</p>
+<p>Trả lời khi truy vấn đến</p>
+<p>Phù hợp khi cần đáp án ngay hoặc truy vấn sau phụ thuộc đáp án trước</p>
+<p class="emphasis">Q1 → trả lời → mới biết Q2</p>
 </div>
 <div class="accent">
 <h2>Offline</h2>
-<p>Nhận toàn bộ truy vấn trước</p>
-<p class="emphasis">Sắp thứ tự rồi xử lý</p>
+<p>Biết trước toàn bộ truy vấn độc lập</p>
+<p>Có thể chờ và đổi thứ tự xử lý, đồng thời cần lưu truy vấn và sắp xếp</p>
+<p class="emphasis">Nhận đủ → sắp → xử lý → trả lời</p>
 </div>
 </div>
 
-Mo cơ bản áp dụng khi mảng **tĩnh** và có thể đổi thứ tự xử lý truy vấn
+<p v-click class="decision-note reveal">Mo cơ bản cần mảng tĩnh và quyền đổi thứ tự xử lý<br>Offline tạo cơ hội tối ưu, hiệu quả còn tùy bài toán và chi phí sắp xếp</p>
 
 <!--
-PDF trang 34  
-Các truy vấn độc lập và đã biết trước  
-Giữ id gốc để trả lời theo thứ tự đầu vào  
-Nếu truy vấn sau phụ thuộc câu trả lời trước, không áp dụng cách sắp xếp này  
-Mảng thay đổi đòi hỏi biến thể khác
+PDF trang 34, bổ sung giải thích theo góp ý seminar
+Offline phải chờ nhận đủ truy vấn, nên không phù hợp yêu cầu phản hồi ngay
+Lưu Q truy vấn và id gốc cần O(Q) bộ nhớ, sort so sánh thường tốn O(Q log Q)
+Biết trước truy vấn là điều kiện chung cho offline, mảng tĩnh là điều kiện của Mo cơ bản
+Offline vẫn có các thuật toán xử lý cập nhật, cần giữ đúng thời gian và phụ thuộc dữ liệu
+[click] Tránh đánh đồng offline với Mo hoặc khẳng định offline luôn nhanh hơn
+-->
+
+---
+clicks: 2
+---
+
+# Khi truy vấn sau phụ thuộc đáp án trước
+
+Mảng ban đầu `[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]`
+
+<div class="three-parts">
+<div><h2>Q1 đã biết</h2><p>Tính sum(0, 2)</p><strong>Chờ đáp án</strong></div>
+<div v-click class="reveal"><h2>Trả lời Q1</h2><p>1 + 2 + 3 = 6</p><strong>ans₁ = 6</strong></div>
+<div v-click class="edge reveal"><h2>Mới xác định Q2</h2><p>L₂ = ans₁ mod 12 = 6</p><strong>sum(6, 9) = 34</strong></div>
+</div>
+
+Phải trả lời Q1 để biết đoạn thật của Q2, nên không thể gom rồi sắp tất cả ngay từ đầu
+
+<!--
+Ví dụ bổ sung, không phải số liệu trong PDF
+Quy tắc giả định của đầu vào là Q2 có L = ans1 mod 12 và R = 9
+[click] Q1 trả về 6
+[click] Suy ra Q2 là [6,9], gồm 7,8,9,10 nên tổng 34
+Trường hợp dữ liệu đã biết và độc lập vẫn có thể dùng online nếu phù hợp
+So sánh tổng đoạn trên mảng tĩnh, prefix sum đã trả lời O(1) nên dùng Mo không mang lại lợi thế
 -->
 
 ---
@@ -635,6 +929,29 @@ Mỗi lần bỏ đúng một ô ở trái và phần giao [3,9] được giữ 
 [click] Bỏ vị trí 1, cnt[1] từ 2 xuống 1
 [click] Bỏ vị trí 2, cnt[1] từ 1 xuống 0  
 Cửa sổ [3,9] hoàn tất, mode vẫn bằng 2
+-->
+
+---
+clicks: 16
+---
+
+# Demo: xử lý ba truy vấn bằng Mo
+
+<MoRun :step="$clicks" />
+
+<!--
+Demo bổ sung từ mảng và ba đoạn của PDF trang 35–49
+Chủ động đổi thứ tự đầu vào để thấy tác dụng của id
+Đầu vào Q1 = [3,9], Q2 = [0,9], Q3 = [0,4]
+Với B = 3, thứ tự xử lý là Q3, Q2, Q1
+Mũi tên hoặc nút Tiếp thực hiện đúng một lần add, remove hoặc ghi đáp án
+Có thể dùng Lùi và Chạy lại để giải thích lại
+Bắt đầu với cửa sổ rỗng L = 0, R = -1
+Các bước 1–5 thêm vị trí 0–4, bước 6 ghi ans[2] = 1
+Các bước 7–11 thêm vị trí 5–9, bước 12 ghi ans[1] = 2
+Các bước 13–15 bỏ vị trí 0–2, bước 16 ghi ans[0] = 2
+Khi đồng hạng lấy giá trị lớn nhất, ví dụ sau khi thêm vị trí 7 thì mode = 3
+Kết quả in theo đầu vào là 2, 2, 1 dù thứ tự xử lý là Q3, Q2, Q1
 -->
 
 ---
@@ -941,100 +1258,6 @@ chapter: questions
 
 <!--
 PDF trang 62  
-Dành thời gian hỏi đáp trước khi chuyển sang các bài tập
--->
-
----
-
-# Bài 1: tự tính một truy vấn mới
-
-Tính `sum(1, 9)` trên mảng ban đầu với **B = 4**
-
-<BlockStrip :values="[1,2,3,4,5,6,7,8,9,10,11,12]" :block-size="4" />
-
-<p class="exercise">Chỉ ra biên trái, block trọn và biên phải</p>
-
-<!--
-PDF trang 63  
-Để người nghe tự xác định các chỉ số trước khi tính  
-Bài dùng đoạn đóng và chỉ số từ 0  
-Đáp án xuất hiện sau Bài 3
--->
-
----
-
-# Bài 2: cập nhật rồi truy vấn lại
-
-Từ mảng Bài 1, gán `a[5] = 20`
-
-<BlockStrip :values="[1,2,3,4,5,6,7,8,9,10,11,12]" :block-size="4" :marks="{5: 'edge'}" />
-
-<p class="exercise">Tổng block nào đổi?<br><code>sum(1, 9)</code> mới bằng bao nhiêu?</p>
-
-<!--
-PDF trang 64  
-Hỏi xem có cần tính lại cả ba block không  
-Đáp án ở cuối bài
--->
-
----
-clicks: 1
----
-
-# Bài 3: chọn cấu trúc và giải thích
-
-<ol class="exercise-options" type="A">
-  <li>Mảng tĩnh, nhiều truy vấn tổng<span class="focus-option" v-click aria-hidden="true"></span></li>
-  <li>Gán điểm + tổng đoạn, nhiều truy vấn</li>
-  <li>Đếm ≥ K, gán điểm, muốn code theo block</li>
-</ol>
-
-<!--
-PDF trang 65–66  
-Yêu cầu nêu cấu trúc, chi phí truy vấn và chi phí cập nhật nếu có
-[click] Nhấn mạnh trường hợp A để bắt đầu thảo luận  
-Nguồn không đưa đáp án cho Bài 3
--->
-
----
-
-# Đáp án Bài 1: sum(1,9) = 54
-
-Đoạn **[1, 9]** trên mảng ban đầu
-
-<BlockStrip :values="[1,2,3,4,5,6,7,8,9,10,11,12]" :block-size="4" :captions="['b[0] = 10','b[1] = 26','b[2] = 42']" :marks="{1:'edge',2:'edge',3:'edge',4:'retained',5:'retained',6:'retained',7:'retained',8:'edge',9:'edge'}" />
-
-<div class="three-parts">
-  <div class="edge"><h2>Biên trái</h2><strong>2 + 3 + 4 = 9</strong></div>
-  <div><h2>Block giữa</h2><strong>26</strong></div>
-  <div class="edge"><h2>Biên phải</h2><strong>9 + 10 = 19</strong></div>
-</div>
-
-<p class="formula-text">9 + 26 + 19 = 54</p>
-
-<!--
-PDF trang 67  
-Biên trái ở chỉ số 1–3, block giữa ở 4–7 và biên phải ở 8–9
--->
-
----
-
-# Đáp án Bài 2: sum(1,9) = 68
-
-Sau gán `a[5] = 20`, **Δ = 14**
-
-<BlockStrip :values="[1,2,3,4,5,20,7,8,9,10,11,12]" :block-size="4" :captions="['b[0] = 10','b[1] = 40','b[2] = 42']" :marks="{1:'edge',2:'edge',3:'edge',4:'retained',5:'added',6:'retained',7:'retained',8:'edge',9:'edge'}" :active-block="1" />
-
-<div class="three-parts">
-  <div class="edge"><h2>Biên trái</h2><strong>9</strong></div>
-  <div><h2>Block giữa</h2><strong>26 + 14 = 40</strong></div>
-  <div class="edge"><h2>Biên phải</h2><strong>19</strong></div>
-</div>
-
-<p class="formula-text">9 + 40 + 19 = 68</p>
-
-<!--
-PDF trang 68  
-Chỉ block 1 đổi tổng  
-Biên trái và biên phải vẫn có tổng lần lượt là 9 và 19
+Dành thời gian hỏi đáp tổng hợp
+Các bài tập đã được đặt ngay sau nội dung liên quan
 -->
